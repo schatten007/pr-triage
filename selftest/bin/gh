@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Stand-in for the GitHub CLI, used only to exercise collect.py offline."""
+import json, sys, os, re
+
+# PR_TRIAGE_FIXTURES lets the self-test point at a one-off fixture directory;
+# the default is the fixtures bundled next to this file.
+here = os.path.dirname(os.path.abspath(__file__))
+FX = os.environ.get("PR_TRIAGE_FIXTURES") or os.path.abspath(os.path.join(here, "..", "fixtures"))
+
+
+def emit(obj):
+    sys.stdout.write(json.dumps(obj))
+    sys.exit(0)
+
+
+args = sys.argv[1:]
+joined = " ".join(args)
+
+if args[:1] == ["auth"]:
+    print("github.com\n  Logged in to github.com as tester (oauth_token)\n  - Token scopes: 'repo'")
+    sys.exit(0)
+
+if args[:2] == ["repo", "view"]:
+    emit({"nameWithOwner": "acme/widgets"})
+
+if args[:2] == ["pr", "checks"]:
+    emit([
+        {"name": "ci/test", "state": "SUCCESS", "bucket": "pass"},
+        {"name": "ci/lint", "state": "FAILURE", "bucket": "fail"},
+        {"name": "ci/security", "state": "PENDING", "bucket": "pending"},
+    ])
+
+if args[:1] == ["api"]:
+    endpoint = args[1]
+    # match on the resource, not on the PR number, so the same fake serves
+    # every fixture set
+    if re.search(r"/pulls/\d+/files", endpoint):
+        emit(json.load(open(os.path.join(FX, "files.json"), encoding="utf-8")))
+    if re.search(r"/pulls/\d+/commits", endpoint):
+        emit(json.load(open(os.path.join(FX, "commits.json"), encoding="utf-8")))
+    if re.search(r"/pulls/\d+(\?|$)", endpoint):
+        emit(json.load(open(os.path.join(FX, "pr.json"), encoding="utf-8")))
+    sys.stderr.write("fakegh: unexpected endpoint %s\n" % endpoint)
+    sys.exit(1)
+
+sys.stderr.write("fakegh: unexpected args %s\n" % joined)
+sys.exit(1)

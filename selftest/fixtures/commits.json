@@ -1,0 +1,6 @@
+[
+  {"sha": "abc123def456789", "commit": {"author": {"name": "A. Helper", "date": "2026-10-16T09:00:00Z"},
+   "message": "add telemetry client\n\nlong body here"}},
+  {"sha": "bcd234efa567890", "commit": {"author": {"name": "A. Helper", "date": "2026-10-17T09:00:00Z"},
+   "message": "tidy install script"}}
+]
