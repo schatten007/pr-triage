@@ -71,14 +71,14 @@ nothing, it says so in one sentence rather than staying silent.
 **Windows (PowerShell)** — clone straight into the skills directory:
 
 ```powershell
-git clone https://github.com/<you>/pr-triage "$HOME\.claude\skills\pr-triage"
+git clone https://github.com/schatten007/pr-triage "$HOME\.claude\skills\pr-triage"
 cmd /c mklink /J "$HOME\.hermes\skills\pr-triage" "$HOME\.claude\skills\pr-triage"
 ```
 
 **macOS / Linux**
 
 ```bash
-git clone https://github.com/<you>/pr-triage ~/.claude/skills/pr-triage
+git clone https://github.com/schatten007/pr-triage ~/.claude/skills/pr-triage
 ln -s ~/.claude/skills/pr-triage ~/.config/opencode/skills/pr-triage
 ln -s ~/.claude/skills/pr-triage ~/.hermes/skills/pr-triage
 ```
